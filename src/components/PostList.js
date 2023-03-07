@@ -23,7 +23,6 @@ function PostList() {
   // 왜 post 안에서 id 하면 안될까..
   return (
     <div>
-      <h1>PostList</h1>
       {postList.map((post) => (
         <Post post={post} key={post.id} />
       ))}
