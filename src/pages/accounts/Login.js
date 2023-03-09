@@ -3,11 +3,12 @@ import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import useLocalStorage from 'utils/useLocalStorage';
+import { setStorageItem } from 'utils/useLocalStorage';
+import { useAppContext, setToken } from 'store';
 
-export default function Signup() {
+export default function Login() {
+  const { dispatch } = useAppContext();
   const navigate = useNavigate();
-  const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', '');
   const [fieldErrors, setFieldErrors] = useState({});
 
   const onFinish = (values) => {
@@ -26,8 +27,9 @@ export default function Signup() {
           data: { token: jwtToken },
         } = response;
 
+        dispatch(setToken(jwtToken));
+        setStorageItem('jwtToken', jwtToken);
         console.log(jwtToken);
-        setJwtToken(jwtToken);
 
         notification.open({
           message: '로그인 성공',
@@ -35,7 +37,7 @@ export default function Signup() {
           icon: <SmileOutlined style={{ color: '#108ee9' }} />,
         });
 
-        navigate('/accounts/signup');
+        navigate('/');
       } catch (error) {
         if (error.response) {
           notification.open({

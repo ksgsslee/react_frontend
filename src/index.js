@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Root from 'pages';
 import { BrowserRouter } from 'react-router-dom';
+import { AppProvider } from 'store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <Root />
+    <AppProvider>
+      <Root />
+    </AppProvider>
   </BrowserRouter>,
 );

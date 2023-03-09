@@ -9,7 +9,7 @@ function Post({ post }) {
       <Card
         hoverable
         cover={<img src={photo} alt={caption} />}
-        actions={[<HeartFilled />]}
+        actions={[<HeartFilled />, <HeartOutlined />]}
       >
         <Card.Meta
           avatar={<Avatar size="large" icon={<UserOutlined />} />}
