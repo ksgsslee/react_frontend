@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Card, Form, Input, Button, notification } from 'antd';
 import { SmileOutlined, FrownOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { setStorageItem } from 'utils/useLocalStorage';
-import { useAppContext, setToken } from 'store';
+import { useAppContext } from 'store';
 
 export default function Login() {
-  const { dispatch } = useAppContext();
+  const { setToken } = useAppContext();
+  const location = useLocation();
   const navigate = useNavigate();
   const [fieldErrors, setFieldErrors] = useState({});
+  const {
+    from: { pathname },
+  } = location.state || { from: { pathname: '/' } };
+  console.log(location.state);
 
   const onFinish = (values) => {
     async function fn() {
@@ -27,8 +31,7 @@ export default function Login() {
           data: { token: jwtToken },
         } = response;
 
-        dispatch(setToken(jwtToken));
-        setStorageItem('jwtToken', jwtToken);
+        setToken(jwtToken);
         console.log(jwtToken);
 
         notification.open({
@@ -37,7 +40,7 @@ export default function Login() {
           icon: <SmileOutlined style={{ color: '#108ee9' }} />,
         });
 
-        navigate('/');
+        navigate(pathname);
       } catch (error) {
         if (error.response) {
           notification.open({

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { getStorageItem } from 'utils/useLocalStorage';
+import { getStorageItem, setStorageItem } from 'utils/useLocalStorage';
 
 const AppContext = createContext();
 
@@ -10,11 +10,13 @@ const reducer = (prevState, action) => {
     return {
       ...prevState,
       jwtToken,
+      isAuthenticated: true,
     };
   } else if (type === DELETE_TOKEN) {
     return {
       ...prevState,
       jwtToken: '',
+      isAuthenticated: false,
     };
   }
 
@@ -22,11 +24,31 @@ const reducer = (prevState, action) => {
 };
 
 export const AppProvider = ({ children }) => {
+  const jwtToken = getStorageItem('jwtToken', '');
+
   const [store, dispatch] = useReducer(reducer, {}, () => ({
-    jwtToken: getStorageItem('jwtToken', ''),
+    jwtToken,
+    isAuthenticated: jwtToken.length > 0,
   }));
+
+  const setToken = (token) => {
+    dispatch({
+      type: SET_TOKEN,
+      payload: token,
+    });
+    setStorageItem('jwtToken', token);
+  };
+
+  const deleteToken = (token) => {
+    dispatch({
+      type: DELETE_TOKEN,
+      payload: token,
+    });
+    setStorageItem('jwtToken', '');
+  };
+
   return (
-    <AppContext.Provider value={{ store, dispatch }}>
+    <AppContext.Provider value={{ store, setToken, deleteToken }}>
       {children}
     </AppContext.Provider>
   );
@@ -37,12 +59,3 @@ export const useAppContext = () => useContext(AppContext);
 // actions
 const SET_TOKEN = 'APP/SET_TOKEN';
 const DELETE_TOKEN = 'APP/DELETE_TOKEN';
-
-// Actions Creators
-export const setToken = (token) => ({
-  type: SET_TOKEN,
-  payload: token,
-});
-export const deleteToken = () => ({
-  type: DELETE_TOKEN,
-});
