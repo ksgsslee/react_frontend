@@ -10,14 +10,9 @@ function Root() {
   return (
     <AppLayout>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <LoginRequiredPage>
-              <Home />
-            </LoginRequiredPage>
-          }
-        />
+        <Route element={<LoginRequiredPage />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         <Route path="/about" element={<About />} />
         <Route path="/accounts/*" element={<AccountRoutes />} />
       </Routes>
