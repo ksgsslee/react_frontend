@@ -1,42 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import Axios from 'axios';
+import React from 'react';
 import Post from 'components/Post';
 import { useAppContext } from 'store';
+import useAxios from 'axios-hooks';
 import { Alert } from 'antd';
-
-const apiUrl = 'http://localhost:8000/api/posts/';
 
 function PostList() {
   const {
     store: { jwtToken },
   } = useAppContext();
-  const [postList, setPostList] = useState([]);
+  const headers = { Authorization: `JWT ${jwtToken}` };
 
-  console.log(jwtToken);
-  useEffect(() => {
-    const headers = { Authorization: `JWT ${jwtToken}` };
-
-    Axios.get(apiUrl, { headers })
-      .then((response) => {
-        const { data } = response;
-        setPostList(data);
-      })
-      .catch((error) => {
-        // error.response;
-      });
-
-    console.log('mounted');
-  }, []); // mount시에
+  const [{ data: postList }] = useAxios({
+    url: 'http://localhost:8000/api/posts/',
+    headers,
+  });
 
   // 왜 post 안에서 id 하면 안될까..
   return (
     <div>
-      {postList.length === 0 && (
+      {postList && postList.length === 0 && (
         <Alert type="warning" message="포스팅이 없습니다." />
       )}
-      {postList.map((post) => (
-        <Post post={post} key={post.id} />
-      ))}
+      {postList && postList.map((post) => <Post post={post} key={post.id} />)}
     </div>
   );
 }
