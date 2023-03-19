@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Post from 'components/Post';
 import { useAppContext } from 'store';
-import useAxios from 'axios-hooks';
 import { Alert } from 'antd';
-import axios from 'axios';
+import { axiosInstance, useAxios } from 'api';
 
 function PostList() {
   const {
@@ -13,7 +12,7 @@ function PostList() {
   const [postList, setPostList] = useState([]);
 
   const [{ data: originPostList }] = useAxios({
-    url: 'http://localhost:8000/api/posts/',
+    url: 'api/posts/',
     headers,
   });
 
@@ -22,11 +21,11 @@ function PostList() {
   }, [originPostList]);
 
   const handleLike = async ({ post, isLike }) => {
-    const apiUrl = `http://localhost:8000/api/posts/${post.id}/like/`;
+    const apiUrl = `api/posts/${post.id}/like/`;
     const method = isLike ? 'POST' : 'DELETE';
 
     try {
-      await axios({
+      await axiosInstance({
         url: apiUrl,
         method,
         headers,

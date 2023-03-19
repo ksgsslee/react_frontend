@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Upload, Form, Input, Button, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import getBase64 from 'utils/base64';
-import axios from 'axios';
+import { axiosInstance } from 'api';
 import { useAppContext } from 'store';
 import { parseErrorMessages } from 'utils/forms';
 
@@ -31,7 +31,7 @@ const PostNewForm = () => {
     });
     const headers = { Authorization: `JWT ${jwtToken}` };
     try {
-      await axios.post('http://127.0.0.1:8000/api/posts/', formData, {
+      await axiosInstance.post('api/posts/', formData, {
         headers,
       });
       console.log('Upload 성공');

@@ -2,6 +2,7 @@ import React from 'react';
 import { Comment as AntdComment } from '@ant-design/compatible';
 import { Avatar, Tooltip } from 'antd';
 import moment from 'moment';
+import { API_HOST } from 'Constant';
 
 const Comment = ({ comment }) => {
   const {
@@ -14,7 +15,7 @@ const Comment = ({ comment }) => {
       author={username}
       avatar={
         <Avatar
-          icon={<img src={'http://localhost:8000' + avatar_url} alt={'asdf'} />}
+          icon={<img src={API_HOST + avatar_url} alt={'asdf'} />}
           alt={username}
         />
       }

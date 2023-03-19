@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Avatar } from 'antd';
 import { HeartOutlined, HeartTwoTone } from '@ant-design/icons';
 import CommentList from 'components/CommentList';
+import { API_HOST } from 'Constant';
 
 function Post({ post, handleLike }) {
   const { author, caption, location, photo, is_like } = post;
@@ -27,12 +28,7 @@ function Post({ post, handleLike }) {
           avatar={
             <Avatar
               size="large"
-              icon={
-                <img
-                  src={'http://localhost:8000' + avatar_url}
-                  alt={username}
-                />
-              }
+              icon={<img src={API_HOST + avatar_url} alt={username} />}
             />
           }
           title={location}

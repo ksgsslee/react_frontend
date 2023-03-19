@@ -3,8 +3,7 @@ import './SuggestionList.scss';
 import { Card } from 'antd';
 import Suggestion from './Suggestion';
 import { useAppContext } from 'store';
-import useAxios from 'axios-hooks';
-import axios from 'axios';
+import { axiosInstance, useAxios } from 'api';
 
 export default function SuggestionList({ style }) {
   const {
@@ -13,7 +12,7 @@ export default function SuggestionList({ style }) {
   const headers = { Authorization: `JWT ${jwtToken}` };
 
   const [{ data: oriUserList, loading, error }, refetch] = useAxios({
-    url: 'http://127.0.0.1:8000/accounts/suggestions/',
+    url: 'accounts/suggestions/',
     headers,
   });
   const [userList, setUserList] = useState([]);
@@ -25,8 +24,8 @@ export default function SuggestionList({ style }) {
   }, [oriUserList]);
 
   const onFollowUser = (username) => {
-    axios
-      .post('http://127.0.0.1:8000/accounts/follow/', { username }, { headers })
+    axiosInstance
+      .post('accounts/follow/', { username }, { headers })
       .then((response) => {
         setUserList((prevUserList) =>
           prevUserList.map((user) =>
